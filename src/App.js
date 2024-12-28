@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Users, Book, HeartPulse, ChevronDown, ChevronUp, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import GallerySection from './components/GallerySection';
+import Team from './components/TeamSection';
 
 // Color palette
 const colors = {
@@ -22,6 +24,8 @@ const Header = () => (
         <ul className="flex space-x-4">
           <li><a href="#about" className="hover:text-red-500">About</a></li>
           <li><a href="#programs" className="hover:text-red-500">Programs</a></li>
+          <li><a href="#team" className="hover:text-red-500">Team</a></li>
+          <li><a href="#gallery" className="hover:text-red-500">Gallery</a></li> 
           <li><a href="#impact" className="hover:text-red-500">Impact</a></li>
           <li><a href="#contact" className="hover:text-red-500">Contact</a></li>
         </ul>
@@ -270,7 +274,9 @@ const App = () => {
       <Hero />
       <About />
       <Programs />
+      <Team />
       <Impact />
+      <GallerySection />
       <Testimonials />
       <FAQ />
       <Contact />
