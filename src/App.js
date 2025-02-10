@@ -22,32 +22,41 @@ const Logo = () => (
   <img src="/peace_logo.png" alt="PaceCare Association Logo" width="120" height="80" />
 );
 
-const Header = () => (
-  <header className="bg-white text-blue-600 p-4 shadow-md">
-    <div className="container mx-auto flex justify-between items-center">
-      <Logo />
-      <nav>
-        <ul className="flex space-x-4">
-          <li><a href="#about" className="hover:text-red-500">About</a></li>
-          <li><a href="#programs" className="hover:text-red-500">Programs</a></li>
-          <li><a href="#team" className="hover:text-red-500">Team</a></li>
-          <li><a href="#gallery" className="hover:text-red-500">Gallery</a></li> 
-          <li><a href="#impact" className="hover:text-red-500">Impact</a></li>
-          <li><a href="#contact" className="hover:text-red-500">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-);
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  return (
+    <header className="bg-white text-blue-600 p-4 shadow-md">
+      <div className="container mx-auto flex justify-between items-center">
+        <Logo />
+        <button
+          className="md:hidden focus:outline-none"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <ChevronUp /> : <ChevronDown />}
+        </button>
+        <nav className={`${isMenuOpen ? 'block' : 'hidden'} md:block`}>
+          <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <li><a href="#about" className="hover:text-red-500">About</a></li>
+            <li><a href="#programs" className="hover:text-red-500">Programs</a></li>
+            <li><a href="#team" className="hover:text-red-500">Team</a></li>
+            <li><a href="#gallery" className="hover:text-red-500">Gallery</a></li>
+            <li><a href="#impact" className="hover:text-red-500">Impact</a></li>
+            <li><a href="#contact" className="hover:text-red-500">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  );
+};
 
 const About = () => (
   <section id="about" className="py-16">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">About PaceCare Association</h2>
-      <div className="flex flex-wrap -mx-4">
+      <div className="flex flex-col md:flex-row -mx-4">
         <div className="w-full md:w-1/2 px-4 mb-8">
-        <img src="/healthcareworkers3.jpg" alt="Healthcare workers in action" className="rounded-lg shadow-lg w-full h-auto" />
+          <img src="/healthcareworkers3.jpg" alt="Healthcare workers in action" className="rounded-lg shadow-lg w-full h-auto" />
         </div>
         <div className="w-full md:w-1/2 px-4">
           <p className="text-lg mb-4 text-gray-700">PaceCare Association is a non-profit, non-governmental organization committed to revolutionizing healthcare access and education in underserved communities. Our mission is to bridge the gap between quality healthcare and those who need it most.</p>
@@ -69,7 +78,7 @@ const ProgramCard = ({ icon: Icon, title, description, color }) => (
 
 const Programs = () => (
   <section id="programs" className="bg-gray-100 py-16">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <h2 className="text-3xl font-bold mb-12 text-center text-blue-600">Our Programs</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <ProgramCard
@@ -110,7 +119,7 @@ const ImpactCounter = ({ value, label }) => (
 
 const Impact = () => (
   <section id="impact" className="py-16">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <h2 className="text-3xl font-bold mb-12 text-center text-blue-600">Our Impact</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         <ImpactCounter value="100,000" label="Patients Treated" />
@@ -131,7 +140,7 @@ const TestimonialCard = ({ quote, author }) => (
 
 const Testimonials = () => (
   <section className="bg-blue-50 py-16">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <h2 className="text-3xl font-bold mb-12 text-center text-blue-600">Testimonials</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <TestimonialCard
@@ -175,7 +184,7 @@ const FAQ = () => {
 
   return (
     <section className="py-16">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">Frequently Asked Questions</h2>
         <div className="space-y-4">
           {faqItems.map((item, index) => (
@@ -197,8 +206,6 @@ const FAQ = () => {
     </section>
   );
 };
-
-
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -239,7 +246,7 @@ const Contact = () => {
 
   return (
     <section id="contact" className="bg-gray-100 py-16">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">Contact Us</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white p-8 rounded-lg shadow-lg">
@@ -323,7 +330,7 @@ const Contact = () => {
 
 const Footer = () => (
   <footer className="bg-blue-600 text-white py-8">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <div className="flex flex-wrap justify-between">
         <div className="w-full md:w-1/4 mb-6 md:mb-0">
           <Logo />
