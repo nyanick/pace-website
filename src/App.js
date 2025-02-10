@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { MapPin, Users, Book, HeartPulse, ChevronDown, ChevronUp, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { MapPin, Users, Book, HeartPulse, ChevronDown, ChevronUp, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, Map } from 'lucide-react';
 import GallerySection from './components/GallerySection';
+import CEOLetter from './components/CEOLetter';
+import Hero from './components/Hero';
 import Team from './components/TeamSection';
+import emailjs from 'emailjs-com'; // For sending emails
+
+// Initialize EmailJS (replace with your credentials)
+emailjs.init('eKByXxFaEXFPUigzF');
 
 // Color palette
 const colors = {
@@ -34,15 +40,6 @@ const Header = () => (
   </header>
 );
 
-const Hero = () => (
-  <section className="bg-blue-100 py-20">
-    <div className="container mx-auto text-center">
-      <h2 className="text-4xl font-bold mb-4 text-blue-600">Bringing Healthcare to Every Corner</h2>
-      <p className="text-xl mb-8 text-gray-700">PaceCare Association is dedicated to improving healthcare access and education in underserved communities.</p>
-      <a href="#donate" className="bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600 transition duration-300">Donate Now</a>
-    </div>
-  </section>
-);
 
 const About = () => (
   <section id="about" className="py-16">
@@ -201,30 +198,128 @@ const FAQ = () => {
   );
 };
 
-const Contact = () => (
-  <section id="contact" className="bg-gray-100 py-16">
-    <div className="container mx-auto">
-      <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">Contact Us</h2>
-      <div className="max-w-2xl mx-auto">
-        <form className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block mb-1 font-semibold">Name</label>
-            <input type="text" id="name" className="w-full p-2 border border-gray-300 rounded" />
+
+
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setIsSuccess(false);
+    setIsError(false);
+
+    emailjs
+      .send('service_gnhn3se', 'template_kzfplpm', formData)
+      .then(
+        (response) => {
+          console.log('Email sent successfully!', response);
+          setIsSuccess(true);
+          setFormData({ name: '', email: '', message: '' });
+        },
+        (error) => {
+          console.error('Failed to send email.', error);
+          setIsError(true);
+        }
+      )
+      .finally(() => setIsSubmitting(false));
+  };
+
+  return (
+    <section id="contact" className="bg-gray-100 py-16">
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">Contact Us</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h3 className="text-2xl font-semibold mb-4 text-blue-600">Get in Touch</h3>
+            <p className="text-lg mb-4 text-gray-700">
+              We’d love to hear from you! Whether you have a question, feedback, or want to collaborate, feel free to reach out.
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <Mail className="text-blue-600" />
+                <p className="text-gray-700">info@pacecare.org</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Phone className="text-blue-600" />
+                <p className="text-gray-700">(123) 456-7890</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Map className="text-blue-600" />
+                <p className="text-gray-700">123 Tiko Street, South West, HC 12345</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="email" className="block mb-1 font-semibold">Email</label>
-            <input type="email" id="email" className="w-full p-2 border border-gray-300 rounded" />
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block mb-1 font-semibold">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block mb-1 font-semibold">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className="block mb-1 font-semibold">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  required
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-300"
+              >
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </button>
+              {isSuccess && (
+                <p className="text-green-600 mt-2">Message sent successfully!</p>
+              )}
+              {isError && (
+                <p className="text-red-600 mt-2">Failed to send message. Please try again.</p>
+              )}
+            </form>
           </div>
-          <div>
-            <label htmlFor="message" className="block mb-1 font-semibold">Message</label>
-            <textarea id="message" rows="4" className="w-full p-2 border border-gray-300 rounded"></textarea>
-          </div>
-          <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-300">Send Message</button>
-        </form>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Footer = () => (
   <footer className="bg-blue-600 text-white py-8">
@@ -245,15 +340,15 @@ const Footer = () => (
         </div>
         <div className="w-full md:w-1/4 mb-6 md:mb-0">
           <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
-          <p>123 Healthcare Street</p>
-          <p>Wellness City, HC 12345</p>
-          <p>Phone: (123) 456-7890</p>
+          <p>123 Tiko Street</p>
+          <p>South West, HC 12345</p>
+          <p>Phone: (+237) 673-018-437</p>
           <p>Email: info@pacecare.org</p>
         </div>
         <div className="w-full md:w-1/4">
           <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
           <div className="flex space-x-4">
-            <a href="#" className="hover:text-blue-200"><Facebook /></a>
+            <a href="https://web.facebook.com/profile.php?id=100093901872968" className="hover:text-blue-200"><Facebook /></a>
             <a href="#" className="hover:text-blue-200"><Twitter /></a>
             <a href="#" className="hover:text-blue-200"><Instagram /></a>
             <a href="#" className="hover:text-blue-200"><Linkedin /></a>
@@ -272,6 +367,7 @@ const App = () => {
     <div className="font-sans">
       <Header />
       <Hero />
+      <CEOLetter />
       <About />
       <Programs />
       <Team />
